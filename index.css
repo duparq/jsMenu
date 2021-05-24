@@ -1,0 +1,175 @@
+
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+}
+
+body {
+    margin: 0px;
+    border: 0px;
+    overflow: hidden;
+}
+
+#topbar {
+    width: 100%;
+    height: 22px;
+    padding: 4px;
+    background-color: #eee;    
+}
+
+#appname {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    padding: 4px;
+    background-color: black;
+    color: gold;
+}
+
+#bottom {
+    position: absolute;
+    left: 0;
+    top: 30px; /* #topbar: 22+4+4 px */
+    right: 0;
+    bottom: 0;
+    padding: 4px;
+    /* padding-top: 4px; */
+    /* padding-left: 4px; */
+    padding-right: 0px; /* Plaque la barre de défilement sur le bord droit */
+    /* padding-bottom: 4px; */
+    background-color: black;
+}
+
+/* Les propriétés padding et margin s'ajoutent aux 100% de la boîte hôte et
+ * causent un débordement du contenu vers la droite et le bas dans la boîte
+ * hôte. Il faut augmenter d'autant le padding de l'hôte à droite et en bas pour
+ * corriger.
+ */
+#console {
+    height: 100%;
+    width: 100%;
+    /* padding: 4px; */
+    /* margin: 4px; */
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 11pt;
+    overflow: auto;
+    color: gold;
+    background-color: black;
+}
+
+.menubar {
+    display: inline-block;
+    cursor: default;
+    user-select: none;
+    -moz-user-select: none;
+    /* background-color: #efe; */
+}
+
+.menubar > .label {
+    display: inline-block;
+    padding: 4px 8px 2px;
+}
+
+.menubar > .label:hover {
+    background-color: #ddd;
+}
+
+div.menu {
+    position: absolute;
+    box-shadow: 0 0 2pt 1pt #888;
+    background-color: #eee;
+    cursor: default;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+
+div.menu table {
+    border-collapse: collapse;
+}
+
+div.menu tr.entry:hover {
+    background-color: #ddd;
+}
+
+div.menu tr.entry td.icon {
+    /* padding: 0 0 5px 0; */
+    /* padding: 0 0 4px 4px; */
+    padding: 4px;
+}
+
+div.menu tr.checkbox td.icon {
+    padding: 0 8px 0 4px;
+}
+
+div.menu tr.entry td.label {
+    padding: 4px 8px;
+    /* vertical-align: bottom; */
+}
+
+div.menu tr.entry td.accel {
+    padding: 4px 0 4px 8px;
+}
+
+div.menu tr.entry td.sub {
+    padding: 4px 0 4px 8px;
+}
+
+div.menu tr.entry.menu svg {
+    width: 16px;
+    height: 16px;
+    fill: #000;
+    stroke-width: 0;
+}
+
+div.menu tr.separator hr {
+    font-size: 1pt;
+}
+
+/*  Checboxes are displayed with SVG elements.
+ *    This makes alignment easier.
+ */
+div.menu tr.entry.checkbox svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+}
+
+div.menu tr.entry.checkbox svg .box {
+    stroke: #888;
+    stroke-width: 1;
+}
+
+div.menu tr.entry.checkbox svg .check {
+    stroke-width: 0;
+}
+
+div.menu tr.entry.checkbox.checked svg .check {
+    stroke: #000;
+    stroke-width: 2;
+}
+
+/*  Radioboxes are displayed with SVG elements.
+ *    This makes alignment easier.
+ */
+div.menu tr.entry.radiobox svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+}
+
+div.menu tr.entry.radiobox svg .box {
+    stroke: #888;
+    stroke-width: 1;
+}
+
+div.menu tr.entry.radiobox svg .check {
+    fill-opacity: 0;
+    stroke-width: 0;
+}
+
+div.menu tr.entry.radiobox.checked svg .check {
+    fill: #000;
+    fill-opacity: 1.0;
+    stroke-width: 0;
+}
