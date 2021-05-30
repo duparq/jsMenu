@@ -3,46 +3,60 @@
 
 //  Menu elements are described by object literals:
 //
-//    Menu: type:"menu"
-//          name:"name"		// The items displayed in the parent
-//          items:[item1,...]	// List of items
+//    Menu: {
+//      type:"menu"
+//      name:"name"		// Displayed in the parent
+//      items:[{},...]		// Menu, Action, Separator, Radio, Checkbox
+//    }
 //
-//    Action: type:"action"
-//            name:"name"	// What is displayed in the menu
-//            action:action	// What to do when the item is clisked
+//    Action: {
+//      type:"action"
+//      name:"name"		// What is displayed in the menu
+//      setup:			// A function that will init the entry
+//      action:action		// What to do when the item is clisked
+//    }
 //
-//    Separator: type: "sep"
+//    Separator: {
+//      type: "sep"
+//    }
 //
-//    Radio: type:"radio"
-//           name:"name"	// Name of the radio group
-//           items:[item1,...]	// List of items
-//           checked:		// The items that is checked
-//           setup:		// A function that will init the group
-//           action:		// What to do when a new item is clicked
+//    Radio: {
+//      type:"radio"
+//      name:"name"		// Name of the radio group
+//      items:["Choice",...]	// List of items
+//      checked:		// The items that is checked [0..n]
+//      setup:			// A function that will init the group
+//      action:			// What to do when a new choice is clicked
+//    }
 //
-//    Checkbox: type:"checkbox"
-//           name:"name"	// Name of the radio group
-//           checked:		// The items that is checked
-//           setup:		// A function that will init the group
-//           action:		// What to do when the box is changed
+//    Checkbox: {
+//      type:"checkbox"
+//      name:"name"		// Name of the radio group
+//      checked:		// The items is checked (true|false)
+//      setup:			// A function that will init the entry
+//      action:			// What to do when the box is changed
+//    }
 
 
-//  La barre de menus affiche les noms de ses menus et gère les événements.
-//    Un clic sur un menu démarre une interaction ou change le menu affiché.
+//  The menu bar displays menu labels and handles menu events.
+//    A 'mousedown' event on a label starts a menu session.
 //
 function Menubar ( div, menus=[] )
 {
+  this.name = "Menubar";
   this.div = div;
   this.div.classList="menubar";
-  this.stack = [];	// Stack of displayed menus
+  this.stack = [];		// Stack of displayed menus
   this.menu = null;
-  this.bed = null ;
+  this.gnd = null ;
+  this.timeout = 0 ;
+  this.delay = 150 ;		// Delay (ms) before updating menus
   this.install( menus );
 };
 
 
-//  Ajoute un menu à la barre de menus.
-//    Crée l'élément DOM pour le label.
+//  Add a menu to the bar.
+//    Create the DOM label.
 //
 Menubar.prototype.install = function ( menus )
 {
@@ -63,7 +77,7 @@ Menubar.prototype.install = function ( menus )
 
 
 //  Begin a menu session.
-//    Create the bed and display the menu.
+//    Create a ground and display the menu.
 //    There's always a displayed menu until the end of the menu session.
 //
 Menubar.prototype.begin = function ( menu, ev )
@@ -78,29 +92,31 @@ Menubar.prototype.begin = function ( menu, ev )
   //
   this.div.style.visibility = "hidden";
 
-  //  Create a bed for menu elements
+  //  Create a ground for menu elements
   //
-  this.bed = document.createElement("div");
-  this.bed.style.position = "absolute";
-  this.bed.style.left = "0";
-  this.bed.style.top = "0";
-  this.bed.style.width = "100%";
-  this.bed.style.height = "100%";
-  // this.bed.style.backgroundColor = "blue";
-  document.body.appendChild(this.bed);
+  this.gnd = document.createElement("div");
+  this.gnd.style.position = "absolute";
+  this.gnd.style.left = "0";
+  this.gnd.style.top = "0";
+  this.gnd.style.width = "100%";
+  this.gnd.style.height = "100%";
+  // this.gnd.style.backgroundColor = "blue";
+  document.body.appendChild(this.gnd);
 
   //  Mouse clicks outside of menu elements end the session
   //
-  connect( this.bed, "mousedown", Menubar.prototype.end, this );
-  connect( this.bed, "mouseup", Menubar.prototype.end, this );
+  connect( this.gnd, "mousedown", Menubar.prototype.end, this );
+  connect( this.gnd, "mouseup", Menubar.prototype.end, this );
 
   //  Key 'Escape' ends the session
   //
-  this.bed.tabIndex = "-1";
-  this.bed.focus();
-  connect( this.bed, "keydown", Menubar.prototype.keyDown, this );
+  this.gnd.tabIndex = "-1";
+  this.gnd.focus();
+  connect( this.gnd, "keydown", Menubar.prototype.keyDown, this );
 
-  //  Create a copy of the menubar on the bed
+  //  Create a copy of the menubar on the ground.
+  //    Note: the copy of the menu label that started the session receives a
+  //    'mouseenter' event and calls 'showMenu'.
   //
   const r = this.div.getBoundingClientRect();
   let bar = document.createElement("div");
@@ -109,7 +125,7 @@ Menubar.prototype.begin = function ( menu, ev )
   bar.style.left = r.left+"px" ;
   bar.style.top = r.top+"px" ;
   // bar.style.backgroundColor="#fee";
-  this.bed.appendChild(bar);
+  this.gnd.appendChild(bar);
 
   for ( let m of this.menus ) {
     m.level = 0;
@@ -122,7 +138,7 @@ Menubar.prototype.begin = function ( menu, ev )
   }
 
   this.action = null ;
-  this.showMenu( menu, ev );
+  this.showMenu(menu,ev);
 };
 
 
@@ -141,7 +157,7 @@ Menubar.prototype.end = function ( )
 {
   trace();
 
-  //  Destroy all the menus elements and the bed
+  //  Destroy all the menus elements and the ground
   //
   while ( this.stack.length ) {
     let top = this.stack.pop();
@@ -150,8 +166,8 @@ Menubar.prototype.end = function ( )
     top.div = null;
   }
 
-  document.body.removeChild(this.bed);
-  this.bed = null ;
+  document.body.removeChild(this.gnd);
+  this.gnd = null ;
 
   //  Show application menubar
   //
@@ -170,9 +186,26 @@ Menubar.prototype.end = function ( )
 
 //  Remove all menus of higher level that 'menu'.
 //
+Menubar.prototype.delayTopMenu = function ( menu, ev )
+{
+  if ( this.delay ) {
+    if ( this.timeout ) {
+      console.log("  clearTimeout("+this.timeout+")");
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout( Menubar.prototype.topMenu.bind(this,menu,ev), this.delay );
+    console.log("  timeout="+this.timeout);
+  }
+  else
+    this.topMenu(menu,ev);
+}
+
 Menubar.prototype.topMenu = function ( menu, ev )
 {
   trace(menu.name+", "+menu.level);
+
+  if ( this.timeout )
+    this.timeout = 0 ;
 
   while ( this.stack.length > menu.level+1 ) {
     let top = this.stack.pop();
@@ -187,9 +220,26 @@ Menubar.prototype.topMenu = function ( menu, ev )
 //    If there is a different menu at the same level, all the menus of this
 //    level or higher are first destroyed.
 //
+Menubar.prototype.delayShowMenu = function ( menu, ev )
+{
+  if ( this.delay ) {
+    if ( this.timeout ) {
+      console.log("  clearTimeout("+this.timeout+")");
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout( Menubar.prototype.showMenu.bind(this,menu,ev), this.delay );
+    console.log("  timeout="+this.timeout);
+  }
+  else
+    this.showMenu(menu,ev);
+}
+
 Menubar.prototype.showMenu = function ( menu, ev )
 {
   trace(menu.name+", "+menu.level);
+
+  if ( this.timeout )
+    this.timeout = 0 ;
 
   ev.stopPropagation();
   ev.preventDefault();
@@ -271,7 +321,7 @@ Menubar.prototype.showMenu = function ( menu, ev )
       //
       connect( tr, "mousedown", eatev, this, i );
       connect( tr, "mouseup", function(action,ev){this.action=action;}, this, i );
-      connect( tr, "mouseenter", Menubar.prototype.topMenu, this, menu );
+      connect( tr, "mouseenter", Menubar.prototype.delayTopMenu, this, menu );
     }
     else if ( i.type === "separator" ) {
       //
@@ -318,7 +368,7 @@ Menubar.prototype.showMenu = function ( menu, ev )
 
       connect( tr, "mousedown", eatev );
       connect( tr, "mouseup", eatev );
-      connect( tr, "mouseenter", Menubar.prototype.showMenu, this, i );
+      connect( tr, "mouseenter", Menubar.prototype.delayShowMenu, this, i );
     }
     else if ( i.type === "radio" ) {
       //
@@ -361,7 +411,7 @@ Menubar.prototype.showMenu = function ( menu, ev )
 
 	connect( tr, "mousedown", eatev );
 	connect( tr, "mouseup", Menubar.radioMouseUp, this, {radio:i,n:n} );
-	connect( tr, "mouseenter", Menubar.prototype.topMenu, this, menu );
+	connect( tr, "mouseenter", Menubar.prototype.delayTopMenu, this, menu );
 
 	n++ ;
       }
@@ -400,7 +450,7 @@ Menubar.prototype.showMenu = function ( menu, ev )
 
       connect( tr, "mousedown", eatev );
       connect( tr, "mouseup", Menubar.checkboxMouseUp, this, i );
-      connect( tr, "mouseenter", Menubar.prototype.topMenu, this, menu );
+      connect( tr, "mouseenter", Menubar.prototype.delayTopMenu, this, menu );
     }
     else
       console.log("Unknown menu entry type \""+i.type+"\"");
@@ -408,7 +458,7 @@ Menubar.prototype.showMenu = function ( menu, ev )
 
   t.appendChild( tb );
   div.appendChild( t );
-  this.bed.appendChild( div );
+  this.gnd.appendChild( div );
   menu.div = div ;
 };
 
