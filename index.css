@@ -57,7 +57,7 @@ body {
     background-color: black;
 }
 
-.menubar {
+div.menubar {
     display: inline-block;
     cursor: default;
     user-select: none;
@@ -65,13 +65,9 @@ body {
     /* background-color: #efe; */
 }
 
-.menubar > .label {
+div.menubar .entry {
     display: inline-block;
     padding: 4px 8px 2px;
-}
-
-.menubar > .label:hover {
-    background-color: #ddd;
 }
 
 div.menu {
@@ -83,13 +79,8 @@ div.menu {
     -moz-user-select: none;
 }
 
-
 div.menu table {
     border-collapse: collapse;
-}
-
-div.menu tr.entry:hover {
-    background-color: #ddd;
 }
 
 div.menu tr.entry td.icon {
@@ -173,3 +164,12 @@ div.menu tr.entry.radiobox.checked svg .check {
     fill-opacity: 1.0;
     stroke-width: 0;
 }
+
+div.menubar .entry.active,
+div.menu .entry.active {
+    background-color: #ccc;
+}
+
+/* div.menu tr.entry:hover { */
+/*     background-color: #ddd; */
+/* } */
