@@ -2,19 +2,6 @@
 "use strict";
 
 
-function connect ( element, eventname, fn, arg1, arg2 )
-{
-  element.addEventListener(eventname, function(ev) { return fn.call(arg1, arg2, ev); } );
-}
-
-
-function eatev ( o, ev )
-{
-  ev.stopPropagation();
-  ev.preventDefault();
-}
-
-
 //    M a i n
 //
 function main ( )
@@ -29,14 +16,12 @@ function main ( )
 
   let appname = document.createElement("span");
   appname.id = "appname";
-  appname.innerHTML = "Menus demo" ;
+  appname.innerHTML = "Menu demo" ;
   topbar.appendChild( appname );
 
-  let div = document.createElement("div");
-  div.id = "menus";
+  let div = new Menu( menubar );
+  div.id = "menubar";
   topbar.appendChild( div );
-
-  let menubar = new Menubar( div, menus );
 
   div = document.createElement("div");
   div.id = "console";
@@ -72,8 +57,8 @@ function loadScripts ( scripts, fn )
 //  Start application after the last script is loaded.
 //
 window.addEventListener("load", function() {
-  loadScripts(["Menubar.js",
+  loadScripts(["Menu.js",
 	       "console.js",
-	       "menus.js"],
+	       "menubar.js"],
 	      main);
 } );
