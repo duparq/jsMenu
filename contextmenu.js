@@ -1,37 +1,8 @@
 
 "use strict";
 
-
-function setup1 ( radio )
-{
-  console.log("setup1: "+radio.checked);
-
-  if ( radio.checked == undefined )
-    radio.checked = 0 ;
-
-  console.log("setup1: "+radio.checked);
-}
-
-
-function apply1 ( radio )
-{
-  console.log("apply1: "+radio.checked);
-}
-
-
-let sub2 = { type:"menu", name:"Sub2",
-	     items:[ { type:"action", name:"Sub21" },
-		     { type:"action", name:"Sub22" } ]
-	   };
-
-let radio1 = { type:"radiogroup", name:"Radio1", setup:setup1, action:apply1,
-	       items:[ { type:"radio", name:"Choice 1" },
-		       { type:"radio", name:"Choice 2" },
-		       { type:"radio", name:"Choice 3" } ]
-	     };
-
-var menubar = {
-  type:"bar", name:"menubar",
+var contextmenudef = {
+  type:"menu", name:"contextmenu",
   items:[
     { type:"menu", name:"File",
       items:[ { type:"action", name:"New" },

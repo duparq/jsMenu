@@ -65,7 +65,7 @@ div.menubar {
     /* background-color: #efe; */
 }
 
-div.menubar .entry {
+div.menubar .item {
     display: inline-block;
     padding: 4px 8px 2px;
 }
@@ -83,7 +83,7 @@ div.menu table {
     border-collapse: collapse;
 }
 
-div.menu tr.entry td.icon {
+div.menu tr.item td.icon {
     /* padding: 0 0 5px 0; */
     /* padding: 0 0 4px 4px; */
     padding: 4px;
@@ -93,20 +93,20 @@ div.menu tr.checkbox td.icon {
     padding: 0 8px 0 4px;
 }
 
-div.menu tr.entry td.label {
+div.menu tr.item td.label {
     padding: 4px 8px;
     /* vertical-align: bottom; */
 }
 
-div.menu tr.entry td.accel {
+div.menu tr.item td.accel {
     padding: 4px 0 4px 8px;
 }
 
-div.menu tr.entry td.sub {
+div.menu tr.item td.sub {
     padding: 4px 0 4px 8px;
 }
 
-div.menu tr.entry.menu svg {
+div.menu tr.item.menu svg {
     width: 16px;
     height: 16px;
     fill: #000;
@@ -120,22 +120,22 @@ div.menu tr.separator hr {
 /*  Checboxes are displayed with SVG elements.
  *    This makes alignment easier.
  */
-div.menu tr.entry.checkbox svg {
+div.menu tr.item.checkbox svg {
     width: 20px;
     height: 20px;
     fill: none;
 }
 
-div.menu tr.entry.checkbox svg .box {
+div.menu tr.item.checkbox svg .box {
     stroke: #888;
     stroke-width: 1;
 }
 
-div.menu tr.entry.checkbox svg .check {
+div.menu tr.item.checkbox svg .check {
     stroke-width: 0;
 }
 
-div.menu tr.entry.checkbox.checked svg .check {
+div.menu tr.item.checkbox.checked svg .check {
     stroke: #000;
     stroke-width: 2;
 }
@@ -143,33 +143,33 @@ div.menu tr.entry.checkbox.checked svg .check {
 /*  Radioboxes are displayed with SVG elements.
  *    This makes alignment easier.
  */
-div.menu tr.entry.radiobox svg {
+div.menu tr.item.radiobox svg {
     width: 20px;
     height: 20px;
     fill: none;
 }
 
-div.menu tr.entry.radiobox svg .box {
+div.menu tr.item.radiobox svg .box {
     stroke: #888;
     stroke-width: 1;
 }
 
-div.menu tr.entry.radiobox svg .check {
+div.menu tr.item.radiobox svg .check {
     fill-opacity: 0;
     stroke-width: 0;
 }
 
-div.menu tr.entry.radiobox.checked svg .check {
+div.menu tr.item.radiobox.checked svg .check {
     fill: #000;
     fill-opacity: 1.0;
     stroke-width: 0;
 }
 
-div.menubar .entry.active,
-div.menu .entry.active {
+div.menubar .item.active,
+div.menu .item.active {
     background-color: #ccc;
 }
 
-/* div.menu tr.entry:hover { */
+/* div.menu tr.item:hover { */
 /*     background-color: #ddd; */
 /* } */

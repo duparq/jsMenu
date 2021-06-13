@@ -39,14 +39,3 @@ console.redirect = function ( v )
     console.org_clear = undefined ;
   }
 };
-
-
-function trace ( msg=null )
-{
-  if ( msg == null )
-    msg = "";
-  else
-    msg="("+msg+")";
-  // console.log(new Error().stack.split('\n')[1].replace('@','	'));
-  console.log(new Error().stack.split('\n')[1].split('@')[0]+msg);
-}
